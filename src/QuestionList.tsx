@@ -3,13 +3,13 @@ import { QuestionData } from "./questionsData";
 import { Question } from "./Question";
 
 interface Props {
-    data: QuestionData[];
+    data?: QuestionData[];
     renderItem?: (item: QuestionData) => JSX.Element;
 }
 
 export const QuestionList = ({ data, renderItem }: Props) => (
-    <ul>
-        {data.map((question) => (
+    <ul className="m-3">
+        {data?.map((question) => (
             <li key={question.Id}>
                 {renderItem ? (
                     renderItem(question)

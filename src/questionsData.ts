@@ -61,3 +61,19 @@ export const getQuestion = async (Id: number): Promise<QuestionData | null> => {
     const result = questions.filter((q) => q.Id == Id);
     return result.length === 0 ? null : result[0];
 };
+
+export const getAllQuestions = async (): Promise<QuestionData[]> => {
+    await wait(200);
+    return questions;
+};
+
+export const searchQuestions = async (
+    critiria: string
+): Promise<QuestionData[]> => {
+    await wait(300);
+    return questions.filter(
+        (q) =>
+            q.title.toLowerCase().indexOf(critiria.toLowerCase()) >= 0 ||
+            q.content.toLowerCase().indexOf(critiria.toLowerCase()) >= 0
+    );
+};

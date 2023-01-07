@@ -6,17 +6,22 @@ interface Props {
     showContent?: boolean;
 }
 
-export const Question = ({ data, showContent }: Props) => (
-    <div>
-        <Link to={`/question/${data.Id}`}>{data.title}</Link>
+export const Question = ({ data, showContent = true }: Props) => (
+    <div className="mt-3">
+        <Link
+            className="text-dark text-decoration-none fs-3 "
+            to={`/question/${data.Id}`}
+        >
+            {data.title}
+        </Link>
         {showContent && (
-            <div>
+            <div className="text-secondary fw-lighter">
                 {data.content.length > 50
                     ? `${data.content.substring(0, 50)}...`
                     : data.content}
             </div>
         )}
-        <div>
+        <div className="text-secondary fw-lighter fst-italic">
             {`Asked by ${
                 data.userName
             } on ${data.created.toLocaleDateString()} ${data.created.toLocaleTimeString()}`}

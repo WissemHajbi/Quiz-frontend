@@ -1,6 +1,10 @@
 import React from "react";
 import { QuestionList } from "./QuestionList";
-import { getUnansweredQuestions, QuestionData } from "./questionsData";
+import {
+    getAllQuestions,
+    getUnansweredQuestions,
+    QuestionData,
+} from "./questionsData";
 import { PageTitle } from "./PageTitle";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +14,7 @@ export const Home = () => {
 
     React.useEffect(() => {
         const doGetUnansweredQuestions = async () => {
-            const unansweredQuestions = await getUnansweredQuestions();
+            const unansweredQuestions = await getAllQuestions();
             setQuestions(unansweredQuestions);
             setQuestionsLoading(false);
         };
