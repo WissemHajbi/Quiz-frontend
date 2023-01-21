@@ -1,21 +1,19 @@
 import React from "react";
 import { UserIcon } from "./Icons";
 import { Link, useSearchParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+
+type FormData = {
+    search: string;
+};
 
 export const Header = () => {
-    const handleSearchInputChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setSearch(e.target.value);
-    };
-
+    const { register } = useForm<FormData>();
     const [searchParams] = useSearchParams();
     const critiria = searchParams.get("critiria") || "";
-    const [search, setSearch] = React.useState(critiria);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(search);
     };
 
     return (
@@ -29,11 +27,11 @@ export const Header = () => {
             </Link>
             <form className="d-flex" role="search" onSubmit={handleSubmit}>
                 <input
+                    {...register("search")}
                     className="form-control me-2"
                     type="search"
                     placeholder="Search"
-                    value={search}
-                    onChange={handleSearchInputChange}
+                    defaultValue={critiria}
                 />
             </form>
         </div>

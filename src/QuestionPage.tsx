@@ -3,6 +3,11 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { QuestionData, getQuestion } from "./questionsData";
 import { AnswersList } from "./AnswerList";
+import { useForm } from "react-hook-form";
+
+type FormData = {
+    content: string;
+};
 
 export const QuestionPage = () => {
     const [question, setQuestion] = React.useState<QuestionData | null>(null);
@@ -37,6 +42,21 @@ export const QuestionPage = () => {
                     <AnswersList
                         data={question === null ? undefined : question.answers}
                     />
+                    <div className="container">
+                        <form>
+                            <h4 className="text-secondary d-flex justify-content-center m-4">
+                                Your Answer
+                            </h4>
+                            <div className="form-floating">
+                                <textarea
+                                    className="form-control"
+                                    placeholder="Leave a comment here"
+                                    id="floatingTextarea2"
+                                    style={{ height: "100px" }}
+                                ></textarea>
+                            </div>
+                        </form>
+                    </div>
                 </blockquote>
             </div>
         </div>
