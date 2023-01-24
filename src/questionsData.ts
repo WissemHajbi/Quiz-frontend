@@ -77,3 +77,24 @@ export const searchQuestions = async (
             q.content.toLowerCase().indexOf(critiria.toLowerCase()) >= 0
     );
 };
+
+export interface PostQuestionData {
+    title: string;
+    content: string;
+    created: Date;
+    userName: string;
+}
+
+export const postQuestion = async (
+    question: PostQuestionData
+): Promise<QuestionData | undefined> => {
+    await wait(200);
+    const Id = Math.max(...questions.map((q) => q.Id)) + 1;
+    const newQuestion: QuestionData = {
+        ...question,
+        Id,
+        answers: [],
+    };
+    questions.push(newQuestion);
+    return newQuestion;
+};

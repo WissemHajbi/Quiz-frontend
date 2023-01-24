@@ -1,7 +1,6 @@
 import { Page } from "./Page";
-import { useForm } from "react-hook-form";
-import { truncate } from "fs/promises";
-import { ErrorResponse } from "@remix-run/router";
+import { useForm, useFormState } from "react-hook-form";
+import { postQuestion } from "./questionsData";
 import React from "react";
 
 type FormData = {
@@ -12,12 +11,21 @@ type FormData = {
 export const AskPage = () => {
     const {
         register,
-        setError,
         formState: { errors },
         handleSubmit,
     } = useForm<FormData>();
 
-    const onSubmit = (data: FormData) => {};
+    const [successfull, setSuccessfull] = React.useState(false);
+
+    const onSubmit = async (data: FormData) => {
+        const res = await postQuestion({
+            title: data.title,
+            content: data.content,
+            created: new Date(),
+            userName: "wissem",
+        });
+        setSuccessfull(res ? true : false);
+    };
 
     return (
         <Page title="Ask a question">
@@ -67,9 +75,15 @@ export const AskPage = () => {
                             <button
                                 type="submit"
                                 className="btn btn-success mt-4"
+                                disabled={successfull}
                             >
                                 Submit your question
                             </button>
+                            {successfull && (
+                                <p className="text-success p-2 fs-6 fw-bold fst-italic opacity-75">
+                                    form is submitted successfully :)
+                                </p>
+                            )}
                         </form>
                     </div>
                 </div>
