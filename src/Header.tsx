@@ -1,6 +1,6 @@
 import React from "react";
 import { UserIcon } from "./Icons";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 type FormData = {
@@ -8,12 +8,13 @@ type FormData = {
 };
 
 export const Header = () => {
-    const { register } = useForm<FormData>();
+    const { register, handleSubmit } = useForm<FormData>();
     const [searchParams] = useSearchParams();
     const critiria = searchParams.get("critiria") || "";
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit = ({ search }: FormData) => {
+        navigate(`search?critiria=${search}`);
     };
 
     return (
@@ -25,7 +26,11 @@ export const Header = () => {
                 <UserIcon />
                 <span>Sign In</span>
             </Link>
-            <form className="d-flex" role="search" onSubmit={handleSubmit}>
+            <form
+                className="d-flex"
+                role="search"
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <input
                     {...register("search")}
                     className="form-control me-2"

@@ -6,8 +6,8 @@ import React from "react";
 
 export const SearchPage = () => {
     const [searchParams] = useSearchParams();
-    const [questions, setQuestions] = React.useState<QuestionData[]>();
     const search = searchParams.get("critiria") || "";
+    const [questions, setQuestions] = React.useState<QuestionData[]>();
 
     React.useEffect(() => {
         const doSearch = async (critiria: string) => {
@@ -19,7 +19,10 @@ export const SearchPage = () => {
 
     return (
         <Page title="Search Results">
-            {search && <p>for "{search}"</p>} <QuestionList data={questions} />
+            {search && (
+                <p className="text-secondary fst-italic">for "{search}"</p>
+            )}{" "}
+            <QuestionList data={questions} />
         </Page>
     );
 };
