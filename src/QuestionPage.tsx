@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { QuestionData, getQuestion } from "./questionsData";
 import { AnswersList } from "./AnswerList";
 import { useForm } from "react-hook-form";
+import { postAnswer } from "./questionsData";
 
 type FormData = {
     content: string;
@@ -17,8 +18,17 @@ export const QuestionPage = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<FormData>();
+    const [successfull, setSuccessfull] = React.useState(false);
 
-    const onSubmit = (data: FormData) => {};
+    const onSubmit = async (data: FormData) => {
+        const res = await postAnswer({
+            Id: question!.Id,
+            content: data.content,
+            userName: "wissem",
+            created: new Date(),
+        });
+        setSuccessfull(res ? true : false);
+    };
 
     React.useEffect(() => {
         const doGetQuestion = async (Id: number) => {
@@ -74,9 +84,15 @@ export const QuestionPage = () => {
                             <button
                                 type="submit"
                                 className="btn btn-success mt-4"
+                                disabled={successfull}
                             >
                                 Submit your asnwer
                             </button>
+                            {successfull && (
+                                <p className="text-success p-2 fs-6 fw-bold fst-italic opacity-75">
+                                    your answer has been submitted successfully
+                                </p>
+                            )}
                         </form>
                     </div>
                 </blockquote>

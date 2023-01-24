@@ -11,7 +11,7 @@ export const AnswersList = ({ data }: Props) => {
             {data?.map((answer) => (
                 <div>
                     <hr />
-                    <li className="p-2" key={answer.Id}>
+                    <li className="p-2" key={answer.answerId}>
                         <Answer data={answer} />
                     </li>
                 </div>

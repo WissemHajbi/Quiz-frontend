@@ -10,7 +10,7 @@ export interface QuestionData {
 }
 
 export interface AnswerData {
-    Id: number;
+    answerId: number;
     content: string;
     userName: string;
     created: Date;
@@ -26,14 +26,14 @@ const questions: QuestionData[] = [
         created: new Date(),
         answers: [
             {
-                Id: 1,
+                answerId: 1,
                 content:
                     "To catch problems earlier speeding up your developments",
                 userName: "Jane",
                 created: new Date(),
             },
             {
-                Id: 2,
+                answerId: 2,
                 content:
                     "So, that you can use the JavaScript features of tomorrow, today",
                 userName: "Fred",
@@ -97,4 +97,26 @@ export const postQuestion = async (
     };
     questions.push(newQuestion);
     return newQuestion;
+};
+
+export interface PostAnswerData {
+    Id: number;
+    content: string;
+    userName: string;
+    created: Date;
+}
+
+export const postAnswer = async (
+    answer: PostAnswerData
+): Promise<AnswerData | undefined> => {
+    await wait(500);
+    const question = questions.filter((q) => q.Id === answer.Id)[0];
+    question.answers.push({
+        answerId: 99,
+        ...answer,
+    });
+    return {
+        answerId: 99,
+        ...answer,
+    };
 };
