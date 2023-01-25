@@ -7,18 +7,32 @@ import {
 } from "./questionsData";
 import { PageTitle } from "./PageTitle";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import {
+    gettingUnansweredQuestionsAction,
+    gotUnansweredQuestionsAction,
+    AppState,
+} from "./Store";
 
 export const Home = () => {
-    const [questions, setQuestions] = React.useState<QuestionData[]>([]);
-    const [questionsLoading, setQuestionsLoading] = React.useState(true);
+    const questions = useSelector(
+        (state: AppState) => state.questions.unanswered
+    );
+    const questionsLoading = useSelector(
+        (state: AppState) => state.questions.loading
+    );
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
         const doGetUnansweredQuestions = async () => {
-            const unansweredQuestions = await getAllQuestions();
-            setQuestions(unansweredQuestions);
-            setQuestionsLoading(false);
+            dispatch(gettingUnansweredQuestionsAction());
+            const unansweredQuestions = await getUnansweredQuestions();
+            dispatch(gotUnansweredQuestionsAction(unansweredQuestions));
         };
         doGetUnansweredQuestions();
+
+        // next comment is to disable the warning from Eslint =>
+        // eslint-disable-next-line
     }, []);
 
     const navigate = useNavigate();
