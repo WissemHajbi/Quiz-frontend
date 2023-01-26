@@ -5,13 +5,16 @@ import { QuestionData, getQuestion } from "./questionsData";
 import { AnswersList } from "./AnswerList";
 import { useForm } from "react-hook-form";
 import { postAnswer } from "./questionsData";
+import { useSelector, useDispatch } from "react-redux";
+import { AppState, gettingQuestionAction, gotQuestionAction } from "./Store";
 
 type FormData = {
     content: string;
 };
 
 export const QuestionPage = () => {
-    const [question, setQuestion] = React.useState<QuestionData | null>(null);
+    const dispatch = useDispatch();
+    const question = useSelector((state: AppState) => state.questions.viewing);
     const { Id } = useParams();
     const {
         register,
@@ -32,8 +35,9 @@ export const QuestionPage = () => {
 
     React.useEffect(() => {
         const doGetQuestion = async (Id: number) => {
+            dispatch(gettingQuestionAction());
             const foundQuestion = await getQuestion(Id);
-            setQuestion(foundQuestion);
+            dispatch(gotQuestionAction(foundQuestion));
         };
         if (Id) {
             doGetQuestion(Number(Id));
