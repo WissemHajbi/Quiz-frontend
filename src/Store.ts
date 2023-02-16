@@ -120,7 +120,7 @@ const QuestionsReducer = (
             return {
                 ...state,
                 loading: false,
-                srearched: action.questions,
+                searched: action.questions,
             };
         }
     }

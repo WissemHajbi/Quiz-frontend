@@ -10,7 +10,7 @@ export const Question = ({ data, showContent = true }: Props) => (
     <div className="mt-3">
         <Link
             className="text-dark text-decoration-none fs-3 "
-            to={`/question/${data.Id}`}
+            to={`/question/${data.questionId}`}
         >
             {data.title}
         </Link>

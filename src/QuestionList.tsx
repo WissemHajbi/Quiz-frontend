@@ -7,16 +7,18 @@ interface Props {
     renderItem?: (item: QuestionData) => JSX.Element;
 }
 
-export const QuestionList = ({ data, renderItem }: Props) => (
-    <ul className="m-3">
-        {data?.map((question) => (
-            <li key={question.Id}>
-                {renderItem ? (
-                    renderItem(question)
-                ) : (
-                    <Question data={question} />
-                )}
-            </li>
-        ))}
-    </ul>
-);
+export const QuestionList = ({ data, renderItem }: Props) => {
+    return (
+        <ul className="m-3">
+            {data?.map((question) => (
+                <li key={question.questionId}>
+                    {renderItem ? (
+                        renderItem(question)
+                    ) : (
+                        <Question data={question} />
+                    )}
+                </li>
+            ))}
+        </ul>
+    );
+};

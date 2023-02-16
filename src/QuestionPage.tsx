@@ -25,7 +25,7 @@ export const QuestionPage = () => {
 
     const onSubmit = async (data: FormData) => {
         const res = await postAnswer({
-            Id: question!.Id,
+            Id: question!.questionId,
             content: data.content,
             userName: "wissem",
             created: new Date(),
