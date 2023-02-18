@@ -8,6 +8,7 @@ import { QuestionPage } from "./QuestionPage";
 import NotFoundPage from "./NotFoundPage";
 import { Provider } from "react-redux";
 import { store } from "./Store";
+import { SignOutPage } from "./SignOutPage";
 
 const AskPage = React.lazy(() => import("./AskPage"));
 
@@ -29,7 +30,22 @@ function App() {
                                 </React.Suspense>
                             }
                         />
-                        <Route path="signin" element={<SignInPage />} />
+                        <Route
+                            path="signin"
+                            element={<SignInPage action="signin" />}
+                        />
+                        <Route
+                            path="signin-callback"
+                            element={<SignInPage action="signin-callback" />}
+                        />
+                        <Route
+                            path="signout"
+                            element={<SignOutPage action="signout" />}
+                        />
+                        <Route
+                            path="signout-callback"
+                            element={<SignOutPage action="signout-callback" />}
+                        />
                         <Route path="search" element={<SearchPage />} />
                         <Route path="question/:Id" element={<QuestionPage />} />
                         <Route path="*" element={<NotFoundPage />} />
