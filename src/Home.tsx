@@ -13,8 +13,10 @@ import {
     gotUnansweredQuestionsAction,
     AppState,
 } from "./Store";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const Home = () => {
+    const { isAuthenticated } = useAuth0();
     const questions = useSelector(
         (state: AppState) => state.questions.unanswered
     );
@@ -45,14 +47,16 @@ export const Home = () => {
         <div>
             <PageTitle>Unanswered Questions</PageTitle>
             <div>
-                <div>
-                    <button
-                        onClick={handleAskQuestionClick}
-                        className="btn btn-primary m-3"
-                    >
-                        Ask a question
-                    </button>
-                </div>
+                {isAuthenticated && (
+                    <div>
+                        <button
+                            onClick={handleAskQuestionClick}
+                            className="btn btn-primary m-3"
+                        >
+                            Ask a question
+                        </button>
+                    </div>
+                )}
                 {questionsLoading ? (
                     <div>Loading ...</div>
                 ) : (

@@ -7,12 +7,14 @@ import { useForm } from "react-hook-form";
 import { postAnswer } from "./questionsData";
 import { useSelector, useDispatch } from "react-redux";
 import { AppState, gettingQuestionAction, gotQuestionAction } from "./Store";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type FormData = {
     content: string;
 };
 
 export const QuestionPage = () => {
+    const { isAuthenticated } = useAuth0();
     const dispatch = useDispatch();
     const question = useSelector((state: AppState) => state.questions.viewing);
     const { Id } = useParams();
@@ -64,40 +66,43 @@ export const QuestionPage = () => {
                         data={question === null ? undefined : question.answers}
                     />
                     <div className="container">
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <h4 className="text-secondary d-flex justify-content-center m-4">
-                                Your Answer
-                            </h4>
-                            <div className="form-floating">
-                                <textarea
-                                    {...register("content", {
-                                        minLength: 55,
-                                    })}
-                                    className="form-control"
-                                    placeholder="Leave a comment here"
-                                    id="floatingTextarea2"
-                                    style={{ height: "100px" }}
-                                ></textarea>
-                            </div>
-                            {errors.content?.type === "minLength" && (
-                                <p className="text-danger p-2 fs-6 fw-bold fst-italic opacity-75">
-                                    this field requieres 50 characters as
-                                    minimum length
-                                </p>
-                            )}
-                            <button
-                                type="submit"
-                                className="btn btn-success mt-4"
-                                disabled={successfull}
-                            >
-                                Submit your asnwer
-                            </button>
-                            {successfull && (
-                                <p className="text-success p-2 fs-6 fw-bold fst-italic opacity-75">
-                                    your answer has been submitted successfully
-                                </p>
-                            )}
-                        </form>
+                        {isAuthenticated && (
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <h4 className="text-secondary d-flex justify-content-center m-4">
+                                    Your Answer
+                                </h4>
+                                <div className="form-floating">
+                                    <textarea
+                                        {...register("content", {
+                                            minLength: 55,
+                                        })}
+                                        className="form-control"
+                                        placeholder="Leave a comment here"
+                                        id="floatingTextarea2"
+                                        style={{ height: "100px" }}
+                                    ></textarea>
+                                </div>
+                                {errors.content?.type === "minLength" && (
+                                    <p className="text-danger p-2 fs-6 fw-bold fst-italic opacity-75">
+                                        this field requieres 50 characters as
+                                        minimum length
+                                    </p>
+                                )}
+                                <button
+                                    type="submit"
+                                    className="btn btn-success mt-4"
+                                    disabled={successfull}
+                                >
+                                    Submit your asnwer
+                                </button>
+                                {successfull && (
+                                    <p className="text-success p-2 fs-6 fw-bold fst-italic opacity-75">
+                                        your answer has been submitted
+                                        successfully
+                                    </p>
+                                )}
+                            </form>
+                        )}
                     </div>
                 </blockquote>
             </div>
