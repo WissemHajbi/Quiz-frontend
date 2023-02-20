@@ -24,7 +24,7 @@ export const SignOutPage = ({ action }: Props) => {
             });
             break;
         case "signout-callback":
-            message = "You successfully signed out!";
+            message = "You successfully signed out :p";
             break;
     }
 
