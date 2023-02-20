@@ -14,7 +14,7 @@ type FormData = {
 };
 
 export const QuestionPage = () => {
-    const { isAuthenticated } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
     const dispatch = useDispatch();
     const question = useSelector((state: AppState) => state.questions.viewing);
     const { Id } = useParams();
@@ -23,14 +23,15 @@ export const QuestionPage = () => {
         handleSubmit,
         formState: { errors },
     } = useForm<FormData>();
+
     const [successfull, setSuccessfull] = React.useState(false);
+    const [accessToken, setaccessToken] = React.useState("");
 
     const onSubmit = async (data: FormData) => {
         const res = await postAnswer({
             Id: question!.questionId,
             content: data.content,
-            userName: "wissem",
-            created: new Date(),
+            accessToken: accessToken,
         });
         setSuccessfull(res ? true : false);
     };
@@ -43,6 +44,22 @@ export const QuestionPage = () => {
         };
         if (Id) {
             doGetQuestion(Number(Id));
+        }
+        try {
+            if (isAuthenticated) {
+                const getaccess = async () => {
+                    const accesstoken = await getAccessTokenSilently({
+                        authorizationParams: {
+                            audience: "https://qanda",
+                            scope: "openid profile QandAAPI email",
+                        },
+                    });
+                    setaccessToken(accesstoken);
+                };
+                getaccess();
+            }
+        } catch (err) {
+            console.log(err);
         }
     }, [Id]);
 

@@ -23,6 +23,8 @@ function App() {
                     clientId="nwNaBnoBhHQzuvYa4QgDCzgRArInbCVE"
                     authorizationParams={{
                         redirect_uri: "http://localhost:3000/signin-callback",
+                        audience: "https://qanda",
+                        scope: "openid profile QandAAPI email",
                     }}
                 >
                     <div className="container">

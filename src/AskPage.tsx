@@ -2,6 +2,7 @@ import { Page } from "./Page";
 import { useForm, useFormState } from "react-hook-form";
 import { postQuestion } from "./questionsData";
 import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type FormData = {
     title: string;
@@ -9,6 +10,7 @@ type FormData = {
 };
 
 export const AskPage = () => {
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
     const {
         register,
         formState: { errors },
@@ -16,16 +18,35 @@ export const AskPage = () => {
     } = useForm<FormData>();
 
     const [successfull, setSuccessfull] = React.useState(false);
+    const [accessToken, setaccessToken] = React.useState("");
 
     const onSubmit = async (data: FormData) => {
         const res = await postQuestion({
             title: data.title,
             content: data.content,
-            created: new Date(),
-            userName: "wissem",
+            accessToken: accessToken,
         });
         setSuccessfull(res ? true : false);
     };
+
+    React.useEffect(() => {
+        try {
+            if (isAuthenticated) {
+                const getaccess = async () => {
+                    const accesstoken = await getAccessTokenSilently({
+                        authorizationParams: {
+                            audience: "https://qanda",
+                            scope: "openid profile QandAAPI email",
+                        },
+                    });
+                    setaccessToken(accesstoken);
+                };
+                getaccess();
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    }, []);
 
     return (
         <Page title="Ask a question">

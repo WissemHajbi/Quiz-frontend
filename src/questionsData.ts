@@ -1,4 +1,5 @@
 import { wait } from "@testing-library/user-event/dist/utils";
+import internal from "stream";
 
 export interface QuestionData {
     questionId: number;
@@ -95,44 +96,54 @@ export const searchQuestions = async (
 export interface PostQuestionData {
     title: string;
     content: string;
-    created: Date;
-    userName: string;
+    accessToken: string;
 }
 
 export const postQuestion = async (
     question: PostQuestionData
 ): Promise<QuestionData | undefined> => {
     await wait(200);
-    const questionId = Math.max(...questions.map((q) => q.questionId)) + 1;
-    const newQuestion: QuestionData = {
-        ...question,
-        questionId,
-        answers: [],
-    };
-    questions.push(newQuestion);
-    return newQuestion;
+    const response = await fetch(`http://localhost:5241/questions`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${question.accessToken}`,
+        },
+        body: JSON.stringify({
+            Title: question.title,
+            Content: question.content,
+        }),
+    });
+
+    const postedQuestion = await response.json();
+    return postedQuestion;
 };
 
 export interface PostAnswerData {
     Id: number;
     content: string;
-    userName: string;
-    created: Date;
+    accessToken: string;
 }
 
 export const postAnswer = async (
     answer: PostAnswerData
 ): Promise<AnswerData | undefined> => {
     await wait(500);
-    const question = questions.filter((q) => q.questionId === answer.Id)[0];
-    question.answers.push({
-        answerId: 99,
-        ...answer,
-    });
-    return {
-        answerId: 99,
-        ...answer,
-    };
+    const response = await fetch(
+        `http://localhost:5241/questions/${answer.Id}/answer`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${answer.accessToken}`,
+            },
+            body: JSON.stringify({
+                Content: answer.content,
+            }),
+        }
+    );
+    const postedAnswer = await response.json();
+    return postedAnswer;
 };
 
 export interface QuestionDataFromServer {
